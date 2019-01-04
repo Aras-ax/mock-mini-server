@@ -1,9 +1,9 @@
-# mock-http-mini
+# mock-mini-server
 Mock + Express 本地假数据服务器，数据文件格式直接采用[Mock](http://mockjs.com/)的语法，同时间，支持扩展`Mock数据占位符`
 
 ## 安装
 ```
-npm install mock-http-mini
+npm install mock-mini-server
 ```
 
 ## 运行
@@ -15,7 +15,7 @@ cd dist
 
 2. 直接运行或者指定端口号，指定的端口号会覆盖[mockhttp.js](#mockhttp.js配置)中配置的端口号
 ```
-mock-http-mini 或者 mock-http-mini 8080
+mock-mini-server 或者 mock-mini-server 8080
 ```
 ## mockhttp.js配置
 
