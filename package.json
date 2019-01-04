@@ -1,0 +1,31 @@
+{
+    "name": "mock-http-mini",
+    "version": "0.0.1",
+    "description": "Mock + Express  简易配置本地假数据服务器",
+    "main": "index.js",
+    "bin": {
+        "mock-http-mini": "index.js"
+    },
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "keywords": [
+        "mock",
+        "express",
+        "http-server"
+    ],
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/moshang-xc/mock-http-mini.git"
+    },
+    "homepage": "https://github.com/moshang-xc/mock-http-mini#readme",
+    "author": "moshangxc",
+    "license": "ISC",
+    "dependencies": {
+        "body-parser": "^1.18.3",
+        "chokidar": "^2.0.4",
+        "express": "^4.16.4",
+        "mockjs": "^1.0.1-beta3",
+        "opn": "^5.4.0"
+    }
+}
