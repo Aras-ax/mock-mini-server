@@ -1,3 +1,5 @@
+const Mock = require('mockjs');
+
 // 扩展mock
 module.exports = {
     // ip地址段落
@@ -18,5 +20,14 @@ module.exports = {
     // mask
     mask: function() {
         return '255.255.255.0';
+    },
+    mac: function() {
+        return Mock.mock(/[0-9A-F][02468ACE]:([0-9A-F]{2}:){4}[0-9A-F]{2}/);
+    },
+    listobject: function(obj) {
+        let data = Mock.mock(obj);
+        for (let key in obj) {
+            return obj[key];
+        }
     }
-}
+};

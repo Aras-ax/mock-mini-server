@@ -13,12 +13,21 @@ function loadFile(filepath) {
     });
 }
 
-function loadDirectory(filepath) {
-    return new Promise((resolve, reject) => {
-        // fs.readdir()
-    });
+// 缓冲节流
+function throttling(callback, delay = 500) {
+    let timeout;
+
+    return function() {
+        if (timeout) {
+            clearTimeout(timeout);
+        }
+        timeout = setTimeout(() => {
+            callback.apply(this, arguments);
+        }, delay);
+    };
 }
 
 module.exports = {
-    loadFile
+    loadFile,
+    throttling
 };

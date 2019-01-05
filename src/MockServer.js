@@ -10,6 +10,7 @@ const chokidar = require('chokidar');
 const templateKey = 'template';
 const console = global.console;
 const cwd = process.cwd();
+const { throttling } = require('./util/index');
 
 class MockServer {
     constructor(app, option) {
@@ -17,6 +18,7 @@ class MockServer {
         this.option = option;
         this.mockTemplate = {};
         this.data = {};
+        this.errorTimes = 0;
         this.apiObj = {};
         this.cwdBase = path.join(cwd, this.option.baseDist);
 
@@ -33,6 +35,7 @@ class MockServer {
     //初始化操作
     init() {
         // 获取配置的全数据模版
+        this.loadStaticDatas = throttling(this.loadStaticDatas);
         this.loadStaticDatas();
 
         // 监听数据文件变化
@@ -59,7 +62,7 @@ class MockServer {
 
             // 根据请求获取对应的文件数据
             // content-type解析客户端的回传的数据类型，同时回传json数据
-            _this.loadData(apiKey).then((data) => {
+            _this.loadData(apiKey, true).then((data) => {
                 data = JSON.stringify(data, null, 2);
                 _this.log(data);
                 res.send(data);
@@ -107,15 +110,24 @@ class MockServer {
                 util.loadFile(fullTemplate).then(res => {
                     this.mockTemplate = JSON.parse(res);
                     this.handleTemplate();
+                    this.errorTimes = 0;
+                    console.error(`获取全部数据模版成功！`);
                 }).catch(res => {
-                    console.error(`获取全部数据模版出错`);
+                    this.errorTimes++;
+                    if (this.errorTimes > 1) {
+                        this.errorTimes = 0;
+                        console.error(`获取全部数据模版出错, 请检查对应的数据文件格式是否正确。`);
+                    } else {
+                        console.error(`获取全部数据模版出错, 重新获取！`);
+                        this.loadStaticDatas();
+                    }
                 });
             }
         }
     }
 
     // 返回的永远是Promise对象，暴露出去的接口
-    loadData(requestUrl) {
+    loadData(requestUrl, type) {
         let data = this.data[requestUrl];
         // 对于需要refresh的数据不会进行缓存，故data有值则为不缓存
         if (data) {
@@ -140,7 +152,10 @@ class MockServer {
                 }, obj.delay);
             });
         }).catch((e) => {
-            this.error(`请求[${requestUrl}]加载不到对应的数据文件！${e}`);
+            this.error(`请求[${requestUrl}]加载数据错误！${e}`);
+            if (!type) {
+                return Promise.resolve({});
+            }
             return Promise.reject();
         });
     }
