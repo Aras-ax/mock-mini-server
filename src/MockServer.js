@@ -161,7 +161,11 @@ class MockServer {
     }
 
     updateData(key, value) {
-        this.data[key] = Object.assign({}, this.data[key] || {}, value);
+        if (Object.prototype.toString.call(value) === '[object Object]') {
+            this.data[key] = Object.assign({}, this.data[key] || {}, value);
+        } else {
+            this.data[key] = value;
+        }
     }
 
     loadTemplate(requestUrl) {
