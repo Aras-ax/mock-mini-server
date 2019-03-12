@@ -30,7 +30,7 @@ mock-mini-server 或者 mock-mini-server 8080
 |`port`|`{Number}}`|`8090`|本地服务器端口号|
 |`openBrowser`|`{Boolean}`|`false`|开启服务器是否自动打开浏览器|
 |`dev`|`{Boolean}`|`false`|是否是开发模式，用于打印对应的信息|
-|[`middleWare`](#middleWare)|`{Function|Array|Object}`|`空`|Express中间件，可用于截获请求，实现自定义逻辑|
+|[`middleWare`](#middleWare)|`{Function/Array/Object}`|`空`|Express中间件，可用于截获请求，实现自定义逻辑|
 |[`mockExtend`](#mockExtend)|`{Object}}`| `{}` |`Mock`数据占位符扩展|
 
 
@@ -42,7 +42,7 @@ defaultDataFile: 'index.json'
 ```
 
 ### middleWare
-```
+```js
 function (req, res, next, server){
 
 }
@@ -197,7 +197,7 @@ module.exports = {
             'ip': '@IP',
             'ip1': '@IP("192.1-12.250-254.0")'
         }
-    }
+    },
     // 无参数配置
     getData: {
         'ID|+1': 1,
@@ -213,7 +213,7 @@ module.exports = {
             a: 1
             ....
         }
-    }
+    },
     // 异步数据
     getAsyncData: function(){
         return new Promise((resolve, reject) => {
