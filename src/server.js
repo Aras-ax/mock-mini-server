@@ -38,16 +38,11 @@ app.use(Express.static(cwd));
 /**
  * 处理所有的请求，中间件
  */
-app.all('*', function(req, res, next) {
+app.all('*', function (req, res, next) {
     let reqData = req.body;
     global.console.log(`请求内容：${JSON.stringify(reqData, 2)}`);
     global.console.log("-----------------------------------------------");
     next();
-});
-
-//请求地址为空，默认重定向到index.html文件
-app.get('/', (req, res) => {
-    res.redirect(301, 'index.html');
 });
 
 //请求地址为空，默认重定向到index.html文件
@@ -64,10 +59,9 @@ app.all('*', (req, res) => {
     if (req.method.toLowerCase() === 'get') {
         if (/\.(html|htm)/.test(req.originalUrl)) {
             res.set('Content-Type', 'text/html');
-            // res.send(indexPage);
-            res.status(404).end();
+            res.send('Welcome to Mock Mini Server!');
+            // res.status(404).end();
         } else {
-            // todo by xc 如果当前路劲下面什么也找不到，则返回对应的目录信息
             res.status(404).end();
         }
     } else if (req.method.toLowerCase() === 'post') {
@@ -92,7 +86,7 @@ app.all('*', (req, res) => {
 });
 
 module.exports = {
-    run: function() {
+    run: function () {
         // todo by xc 读取配置
         let openBrowser = options.openBrowser;
 

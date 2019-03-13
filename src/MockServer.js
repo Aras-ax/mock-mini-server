@@ -57,7 +57,7 @@ class MockServer {
     start() {
         let _this = this;
         this.initMidddleWare();
-        this.app.all('*', function(req, res, next) {
+        this.app.all('*', function (req, res, next) {
             let apiKey = req.path.replace(/^\//, '');
 
             // 根据请求获取对应的文件数据
@@ -72,6 +72,13 @@ class MockServer {
         });
     }
 
+    correctUrl(url) {
+        if (/^\//.test(url)) {
+            return url;
+        }
+        return '/' + url;
+    }
+
     initMidddleWare() {
         let mdWare = this.option.middleWare,
             type = Object.prototype.toString.call(mdWare);
@@ -81,19 +88,28 @@ class MockServer {
                 this.app.use(zhuru(mdWare, this));
                 break;
             case '[object Object]':
-                mdWare.callback = mdWare.callback || function(req, res, next) {
+                mdWare.callback = mdWare.callback || function (req, res, next) {
                     next();
                 };
-
-                mdWare.api ? this.app.use(mdWare.api, zhuru(mdWare.callback, this)) : this.app.use(zhuru(mdWare.callback, this));
+                if (mdWare.api) {
+                    mdWare.api = this.correctUrl(mdWare.api);
+                    this.app.use(mdWare.api, zhuru(mdWare.callback, this))
+                } else {
+                    this.app.use(zhuru(mdWare.callback, this))
+                }
                 break;
             case '[object Array]':
                 for (let i = 0, item; item = mdWare[i++];) {
-                    item.callback = item.callback || function(req, res, next) {
+                    item.callback = item.callback || function (req, res, next) {
                         next();
                     };
 
-                    item.api ? this.app.use(item.api, zhuru(item.callback, this)) : this.app.use(zhuru(item.callback, this));
+                    if (item.api) {
+                        item.api = this.correctUrl(item.api);
+                        this.app.use(item.api, zhuru(item.callback, this));
+                    } else {
+                        this.app.use(zhuru(item.callback, this));
+                    }
                 }
                 break;
         }
@@ -245,18 +261,21 @@ class MockServer {
         let watchPath = this.cwdBase;
         chokidar.watch(watchPath).on('change', (fielpath) => {
             global.console.log(`Data File "${fielpath}" has been changed`);
-            let editfile = fielpath.replace(watchPath, '').replace(/\\/g, '/').replace(/^\//, '');
+            let defaultPath = path.resolve(watchPath, this.option.defaultDataFile);
+            // console.log(`editfile: ${editfile}`);
+            console.log(`defaultPath: ${defaultPath}`);
             try {
-                if (editfile === this.option.defaultDataFile) {
+                if (fielpath === defaultPath) {
                     this.data = {};
                     this.apiObj = {};
                     this.mockTemplate = {};
                     this.loadStaticDatas();
                 } else {
-                    editfile = editfile.replace(/\.(js|json)$/ig, '');
-                    delete this.data[editfile];
-                    delete this.apiObj[editfile];
-                    delete this.mockTemplate[editfile];
+                    // todo 
+                    // editfile = editfile.replace(/\.(js|json)$/ig, '');
+                    // delete this.data[editfile];
+                    // delete this.apiObj[editfile];
+                    // delete this.mockTemplate[editfile];
                 }
             } catch (e) {
                 global.console.error(e);
@@ -275,7 +294,7 @@ class MockServer {
 }
 
 function zhuru(mdware, server) {
-    return function(req, res, next) {
+    return function (req, res, next) {
         mdware.call(this, req, res, next, server);
     };
 }
