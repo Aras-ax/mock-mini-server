@@ -1,0 +1,11 @@
+{
+    "title": "Syntax Demo1",
+    "string1|1-10": "★",
+    "string2|2-4": "LOVE*",
+    "number1|+1": 100,
+    "number2|1-100": 100,
+    "number3|1-100.1-3": 1,
+    "number4|123.1-10": 1,
+    "number5|123.2": 1,
+    "number6": "@MAC"
+}

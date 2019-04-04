@@ -1,6 +1,6 @@
 {
     "name": "mock-mini-server",
-    "version": "0.0.7",
+    "version": "0.1.1",
     "description": "Mock + Express  简易配置本地假数据服务器",
     "main": "src/server.js",
     "bin": {
@@ -8,7 +8,7 @@
     },
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
-        "mock": "cd dist && node --inspect-brk=9229 run.js"
+        "mock": "cd test && node --inspect-brk=9229 run.js"
     },
     "keywords": [
         "mock",

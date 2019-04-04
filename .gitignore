@@ -1,4 +1,4 @@
 #npm
 node_modules/
-node.txt
 dist/
+.npmignore

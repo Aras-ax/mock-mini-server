@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>陌上</title>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <h2>Welcome To My Website!</h2>
+    <h5>Enjoy Yourself Here!</h5>
+    <script>
+        // 正常接口访问
+        $.ajax({
+            type: 'Post',
+            url: 'module',
+            data: {
+                getQosList: '',
+                getUsers: ''
+            },
+            dataType: 'application/json',
+            success(res) {
+                window.console.log(res);
+            }
+        });
+
+        // $.ajax({
+        //     type: 'Post',
+        //     url: 'getUsers',
+        //     data: 'kk',
+        //     dataType: 'text/plain',
+        //     success(res) {
+        //         window.console.log(res);
+        //     }
+        // });
+
+        // // function
+        // $.ajax({
+        //     type: 'Post',
+        //     url: 'fn',
+        //     data: 'kk',
+        //     dataType: 'text/plain',
+        //     success(res) {
+        //         console.log(res);
+        //     }
+        // });
+
+
+        // // delay
+        // $.ajax({
+        //     type: 'Post',
+        //     url: 'delay',
+        //     data: 'kk',
+        //     dataType: 'text/plain',
+        //     success(res) {
+        //         console.log(res);
+        //     }
+        // });
+
+        // // fn_delay
+        // $.ajax({
+        //     type: 'Post',
+        //     url: 'delayFn',
+        //     data: 'kk',
+        //     dataType: 'text/plain',
+        //     success(res) {
+        //         console.log(res);
+        //     }
+        // });
+
+        // refresh
+        // $.ajax({
+        //     type: 'Post',
+        //     url: 'refresh',
+        //     data: 'kk',
+        //     dataType: 'text/plain',
+        //     success(res) {
+        //         console.log(res);
+        //     }
+        // });
+        // $.ajax({
+        //     type: 'Post',
+        //     url: 'refresh',
+        //     data: 'kk',
+        //     dataType: 'text/plain',
+        //     success(res) {
+        //         console.log(res);
+        //     }
+        // });
+        // $.ajax({
+        //     type: 'Post',
+        //     url: 'refresh',
+        //     data: 'kk',
+        //     dataType: 'text/plain',
+        //     success(res) {
+        //         console.log(res);
+        //     }
+        // });
+    </script>
+</body>
+
+</html>
