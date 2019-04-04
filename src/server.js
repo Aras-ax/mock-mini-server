@@ -11,6 +11,7 @@ const curData = {};
 let { loadFile } = require('./util/index');
 let options, port;
 
+console.log('log data .....');
 //读取相关配置
 try {
     options = Object.assign({}, config.baseConfig, require(path.join(cwd, config.configFile)));
@@ -38,7 +39,7 @@ app.use(Express.static(cwd));
 /**
  * 处理所有的请求，中间件
  */
-app.all('*', function (req, res, next) {
+app.all('*', function(req, res, next) {
     let reqData = req.body;
     global.console.log(`请求内容：${JSON.stringify(reqData, 2)}`);
     global.console.log("-----------------------------------------------");
@@ -86,7 +87,7 @@ app.all('*', (req, res) => {
 });
 
 module.exports = {
-    run: function () {
+    run: function() {
         // todo by xc 读取配置
         let openBrowser = options.openBrowser;
 

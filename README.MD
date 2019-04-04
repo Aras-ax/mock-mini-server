@@ -98,9 +98,39 @@ defaultDataFile: 'index.json'
 
 **middlwWare调试说明**
 针对在`vscode`中进行调试说明，配置如下：
+1. `package.json`添加如下配置
+```json
+"scripts": {
+    "mock": "cd dist && node --inspect-brk=9229 run.js"
+}
+```
+
+2. dist目录下面添加run.js
+```js
+const mockServer = require('mock-mini-server');
+
+mockServer.run();
+```
+
+4. vsCode中的配置文件`launch.json`添加如下配置
+```json
+{
+    "type": "node",
+    "request": "launch",
+    "name": "run NPM",
+    "runtimeExecutable": "npm",
+    "runtimeArgs": [
+        "run-script",
+        "mock"
+    ],
+    "port": 9229
+}
+```
+> 9229为vscode生成的监听端口号，两个地方需要保持一致
+
+4. 在`mockhttp.js`文件中打上断点，然后开始调试，当命中`middleWare中的规则时，断点处即可生效调试`
 
 **Example**
-todo by xc 添加不同的示例
 ```js
 // Object格式
 middleWare: {
