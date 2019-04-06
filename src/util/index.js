@@ -13,11 +13,11 @@ function loadFile(filepath) {
     });
 }
 
-// 缓冲节流
+// 节流
 function throttling(callback, delay = 500) {
     let timeout;
 
-    return function() {
+    return function () {
         if (timeout) {
             clearTimeout(timeout);
         }

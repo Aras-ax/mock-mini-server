@@ -1,5 +1,5 @@
 #!/usr/bin/env node
 
-const server = require('./src/server');
+const server = require('./src/start');
 
-server.run(process.argv);
+server();

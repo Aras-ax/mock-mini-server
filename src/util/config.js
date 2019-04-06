@@ -27,7 +27,7 @@ module.exports = {
          */
         middleWare: null,
         /**
-         * Moc扩展
+         * Mock扩展
          */
         mockExtend: {}
     },

@@ -18,15 +18,16 @@ class MockServer {
         this.option = option;
         this.mockTemplate = {};
         this.data = {};
+        this.Mock = Mock;
         this.errorTimes = 0;
         this.apiObj = {};
         this.cwdBase = path.join(cwd, this.option.baseDist);
 
-        if (Object.prototype.toString.call(option.mockExtend) !== '[object Object]') {
+        if (option.mockExtend || Object.prototype.toString.call(option.mockExtend) !== '[object Object]') {
             option.mockExtend = {};
         }
 
-        // 扩展mock todo by xc 添加自定义扩展
+        // mock添加自定义扩展
         Mock.Random.extend(Object.assign({}, mockExtend, option.mockExtend));
 
         this.init();
@@ -56,7 +57,10 @@ class MockServer {
     // 开启服务器
     start() {
         let _this = this;
+        // 挂载中间间
         this.initMidddleWare();
+
+        //拦截请求
         this.app.all('*', function (req, res, next) {
             let apiKey = req.path.replace(/^\//, '');
 
@@ -79,6 +83,9 @@ class MockServer {
         return '/' + url;
     }
 
+    /**
+     * 挂载中间件
+     */
     initMidddleWare() {
         let mdWare = this.option.middleWare,
             type = Object.prototype.toString.call(mdWare);
@@ -92,8 +99,8 @@ class MockServer {
                     next();
                 };
                 if (mdWare.api) {
-                    mdWare.api = this.correctUrl(mdWare.api);
-                    this.app.use(mdWare.api, zhuru(mdWare.callback, this))
+                    let api = this.correctUrl(mdWare.api);
+                    this.app.use(api, zhuru(mdWare.callback, this))
                 } else {
                     this.app.use(zhuru(mdWare.callback, this))
                 }
@@ -115,14 +122,23 @@ class MockServer {
         }
     }
 
-    // 加载通过全局文件夹配置的数据
+    /**
+     * 加载通过全局文件夹配置的数据
+     */
     loadStaticDatas() {
         if (this.option.defaultDataFile) {
             let fullTemplate = path.join(this.cwdBase, this.option.defaultDataFile);
+            // js数据模版解析
             if (path.extname(fullTemplate) === '.js') {
-                this.mockTemplate = require(fullTemplate);
-                this.handleTemplate();
+                new Promise((resolve, reject) => {
+                    this.mockTemplate = require(fullTemplate);
+                }).then(() => {
+                    this.handleTemplate();
+                }).catch(() => {
+                    console.error(`获取全部数据模版出错, 请检查对应的数据文件格式是否正确。`);
+                });
             } else {
+                // json数据模版解析
                 util.loadFile(fullTemplate).then(res => {
                     this.mockTemplate = JSON.parse(res);
                     this.handleTemplate();
@@ -145,7 +161,8 @@ class MockServer {
     // 返回的永远是Promise对象，暴露出去的接口
     loadData(requestUrl, type) {
         let data = this.data[requestUrl];
-        // 对于需要refresh的数据不会进行缓存，故data有值则为不缓存
+
+        // 对于需要refresh的数据不会进行缓存，故data有值则说明该接口为不缓存
         if (data) {
             let obj = this.apiObj[requestUrl] || { delay: 0 };
             return new Promise((resolve, reject) => {
@@ -156,7 +173,7 @@ class MockServer {
         }
 
         return this.loadTemplate(requestUrl).then(res => {
-            let obj = this.apiObj[requestUrl];
+            let obj = this.apiObj[requestUrl] || { delay: 0 };
 
             if (!obj.refresh) {
                 this.data[requestUrl] = res;
@@ -168,10 +185,7 @@ class MockServer {
                 }, obj.delay);
             });
         }).catch((e) => {
-            this.error(`请求[${requestUrl}]加载数据错误！${e}`);
-            if (!type) {
-                return Promise.resolve({});
-            }
+            this.error(`请求[${requestUrl}]加载数据错误或者对应的内容不存在！加载默认配置！`);
             return Promise.reject();
         });
     }
@@ -190,7 +204,7 @@ class MockServer {
         let obj = this.apiObj[requestUrl],
             mockItem = this.mockTemplate[requestUrl];
 
-        // todo by xc 根据请求的数据类型返回对应的数据类型
+        //
         if (mockItem) {
             return new Promise((resolve, reject) => {
                 resolve(this.mock(requestUrl, obj));
@@ -201,6 +215,9 @@ class MockServer {
         }
     }
 
+    /**
+     * 校正数据模版配置参数，统一格式
+     */
     formatOption(key, option) {
         let data = {
             delay: option.delay || apiConfig.delay,
@@ -262,8 +279,6 @@ class MockServer {
         chokidar.watch(watchPath).on('change', (fielpath) => {
             global.console.log(`Data File "${fielpath}" has been changed`);
             let defaultPath = path.resolve(watchPath, this.option.defaultDataFile);
-            // console.log(`editfile: ${editfile}`);
-            console.log(`defaultPath: ${defaultPath}`);
             try {
                 if (fielpath === defaultPath) {
                     this.data = {};
@@ -271,11 +286,11 @@ class MockServer {
                     this.mockTemplate = {};
                     this.loadStaticDatas();
                 } else {
-                    // todo 
-                    // editfile = editfile.replace(/\.(js|json)$/ig, '');
-                    // delete this.data[editfile];
-                    // delete this.apiObj[editfile];
-                    // delete this.mockTemplate[editfile];
+                    // 删除对应接口缓存的数据，下次访问该接口重新生成新的数据
+                    editfile = editfile.replace(/\.(js|json)$/ig, '');
+                    delete this.data[editfile];
+                    delete this.apiObj[editfile];
+                    delete this.mockTemplate[editfile];
                 }
             } catch (e) {
                 global.console.error(e);

@@ -26,8 +26,8 @@ if (process.argv.length > 2) {
     port = options.port;
 }
 
+// 挂载mockserver，读取配置参数
 const mockServer = new MockServer(app, options);
-
 // for parsing application/json
 app.use(bodyParser.json());
 // for parsing application/x-www-form-urlencoded
@@ -39,7 +39,7 @@ app.use(Express.static(cwd));
 /**
  * 处理所有的请求，中间件
  */
-app.all('*', function(req, res, next) {
+app.all('*', function (req, res, next) {
     let reqData = req.body;
     global.console.log(`请求内容：${JSON.stringify(reqData, 2)}`);
     global.console.log("-----------------------------------------------");
@@ -51,21 +51,26 @@ app.get('/', (req, res) => {
     res.redirect(301, 'index.html');
 });
 
-// 开启mock server
+// 开启mock server自定义中间件
 mockServer.start();
 
-//对于匹配不到的路径或者请求，返回默认页面
+// 对于无法匹配的规则，返回默认的内容
 //区分不同的请求返回不同的页面内容
 app.all('*', (req, res) => {
     if (req.method.toLowerCase() === 'get') {
+        // 对应未匹配的html请求，返回默认的文本
         if (/\.(html|htm)/.test(req.originalUrl)) {
             res.set('Content-Type', 'text/html');
             res.send('Welcome to Mock Mini Server!');
-            // res.status(404).end();
+        } else if (req.originalUrl === '/favicon.ico') {
+            res.set('Content-Type', 'application/x-ico');
+            res.send('');
         } else {
+            // 其它get请求返回404
             res.status(404).end();
         }
     } else if (req.method.toLowerCase() === 'post') {
+        // 读取当前已缓存的数据信息返回，如果没有，则返回errorCode: 0
         let postBackData = {},
             curData = mockServer.data,
             requestPath = req.path.replace(/^\//, '');
@@ -83,12 +88,14 @@ app.all('*', (req, res) => {
             };
         }
         res.send(JSON.stringify(postBackData));
+    } else {
+        res.status(404).end();
     }
 });
 
+
 module.exports = {
-    run: function() {
-        // todo by xc 读取配置
+    run: function () {
         let openBrowser = options.openBrowser;
 
         let server = app.listen(port, () => {
@@ -103,7 +110,6 @@ module.exports = {
                 console.log(`端口[${port}]已被占用，请使用其他端口`);
                 setTimeout(() => {
                     server.close();
-                    // server.listen(PORT, HOST);
                 }, 1000);
             }
         });

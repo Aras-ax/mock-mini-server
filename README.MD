@@ -91,10 +91,12 @@ defaultDataFile: 'index.json'
 `req`, `res`, `next`具体的可以看[Express中间件开发文档](http://www.expressjs.com.cn/guide/writing-middleware.html)
 - 如果只是对请求的拦截附件处理，需要最后调用`next()`，以执行后续的逻辑，否则执行完回调立即停止
 
-参数`server`为`mock-mini-server`数据处理类`MockServer`提供如下接口
+参数`server`为`mock-mini-server`数据处理类`MockServer`的实例化对象，提供如下接口
 
-- `loadData(requestUrl)`: `requestUrl`配置的数据模板对应的`key`值。根据请求的地址获取配置的数据模版生成的数据，并返回Promise。
-- `updateData(requestUrl, data)`: `requestUrl`同上，`data`为对应的数据。每次请求接口，是否返回新的数据。
+- `option`：当前`mock-mini-server`设置的配置信息
+- `Mock`: `Mcok`对象，可以直接调用`server.Mock(template)`根据模版生成数据
+- `loadData(requestUrl)`: `requestUrl`为配置的数据模板对应的`key`值。根据请求的地址获取配置的数据模版生成的数据，并返回Promise。
+- `updateData(requestUrl, data)`: `requestUrl`同上，`data`为对应的数据。更新当前已缓存的数据。
 
 **middlwWare调试说明**
 针对在`vscode`中进行调试说明，配置如下：
@@ -104,6 +106,8 @@ defaultDataFile: 'index.json'
     "mock": "cd dist && node --inspect-brk=9229 run.js"
 }
 ```
+> `dist`为需要开启`mock-mini-server`的文件夹的根目录
+> `9229`为`vsCode`中的配置文件`launch.json`中自动生成的`port`
 
 2. dist目录下面添加run.js
 ```js
@@ -112,7 +116,10 @@ const mockServer = require('mock-mini-server');
 mockServer.run();
 ```
 
-4. vsCode中的配置文件`launch.json`添加如下配置
+3. vsCode中的配置文件`launch.json`添加如下配置
+
+打开vscode的的配置文件`launch.json`，点击添加配置，选择`通过 NPM 启动选项`，生成如下配置，修改`runtimeArgs`为`package.json`中设置的`scripts`名称，本示例中是`mock`
+
 ```json
 {
     "type": "node",

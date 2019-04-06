@@ -1,6 +1,6 @@
-const server = require('./src/start');
 const figlet = require('figlet');
 const fs = require('fs');
+const path = require('path');
 const util = require('./util/index');
 
 let config = { version: "1.0.0" };
@@ -11,11 +11,11 @@ util.loadFile('../package.json').then(res => {
 const comments = [{
     key: 'defaultDataFile',
     text: '全数据文件名称',
-    value: ''
+    value: '""'
 }, {
     key: 'baseDist',
     text: '所有数据文件的根目录',
-    value: ''
+    value: '""'
 }, {
     key: 'port',
     text: '本地服务器端口',
@@ -31,7 +31,7 @@ const comments = [{
 }, {
     key: 'mockExtend',
     text: 'Mock扩展',
-    value: {}
+    value: null
 }];
 
 function handleInit() {
@@ -54,7 +54,7 @@ function handleInit() {
             reject(err);
             return;
         }
-        log(`生成配置文件：[${outPath}]`);
+        console.log(`生成配置文件：[${outPath}]`);
     });
 }
 
@@ -72,7 +72,7 @@ function handleVersion() {
 
 function start() {
     if (process.argv.length === 2) {
-        server.run();
+        runServer();
         return;
     }
 
@@ -86,9 +86,13 @@ function start() {
             handleVersion();
             break;
         default:
-            server.run();
+            runServer();
             break;
     }
 }
 
+function runServer() {
+    const server = require('./server');
+    server.run();
+}
 module.exports = start;

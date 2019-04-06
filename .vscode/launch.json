@@ -3,10 +3,11 @@
     // 悬停以查看现有属性的描述。
     // 欲了解更多信息，请访问: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
-    "configurations": [{
+    "configurations": [
+        {
             "type": "node",
             "request": "launch",
-            "name": "run NPM",
+            "name": "Debug With NPM",
             "runtimeExecutable": "npm",
             "runtimeArgs": [
                 "run-script",
@@ -17,12 +18,12 @@
         {
             "type": "node",
             "request": "launch",
-            "name": "启动程序",
-            // "cwd": "${workspaceFolder}\\dist",
-            // EW9调试
-            "cwd": "D:\\Project\\MR9\\MR9\\dist",
-            "program": "${workspaceFolder}\\index.js",
-            "args": ["8077"]
+            "name": "mock-mini-http",
+            "cwd": "${workspaceFolder}/test",
+            "program": "${workspaceFolder}/index.js",
+            "args": [
+                "8089"
+            ]
         }
     ]
 }

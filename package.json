@@ -1,32 +1,33 @@
 {
-    "name": "mock-mini-server",
-    "version": "0.1.1",
-    "description": "Mock + Express  简易配置本地假数据服务器",
-    "main": "src/server.js",
-    "bin": {
-        "mock-mini-server": "index.js"
-    },
-    "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1",
-        "mock": "cd test && node --inspect-brk=9229 run.js"
-    },
-    "keywords": [
-        "mock",
-        "express",
-        "http-server"
-    ],
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/moshang-xc/mock-mini-server.git"
-    },
-    "homepage": "https://github.com/moshang-xc/mock-mini-server#readme",
-    "author": "moshangxc",
-    "license": "ISC",
-    "dependencies": {
-        "body-parser": "^1.18.3",
-        "chokidar": "^2.0.4",
-        "express": "^4.16.4",
-        "mockjs": "^1.0.1-beta3",
-        "opn": "^5.4.0"
-    }
+  "name": "mock-mini-server",
+  "version": "1.0.1",
+  "description": "Mock + Express  简易配置本地假数据服务器",
+  "main": "src/server.js",
+  "bin": {
+    "mock-mini-server": "index.js"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "mock": "cd test && node --inspect-brk=9229 run.js"
+  },
+  "keywords": [
+    "mock",
+    "express",
+    "http-server"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/moshang-xc/mock-mini-server.git"
+  },
+  "homepage": "https://github.com/moshang-xc/mock-mini-server#readme",
+  "author": "moshangxc",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "chokidar": "^2.0.4",
+    "express": "^4.16.4",
+    "figlet": "^1.2.1",
+    "mockjs": "^1.0.1-beta3",
+    "opn": "^5.4.0"
+  }
 }
