@@ -4,7 +4,7 @@ const path = require('path');
 const util = require('./util/index');
 
 let config = { version: "1.0.0" };
-util.loadFile('../package.json').then(res => {
+util.loadFile(path.join(__dirname, '../package.json')).then(res => {
     config = JSON.parse(res);
 });
 
