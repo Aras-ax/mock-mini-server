@@ -108,13 +108,13 @@ defaultDataFile: 'index.json'
 1. `package.json`添加如下配置
 ```json
 "scripts": {
-    "mock": "cd dist && node --inspect-brk=9229 run.js"
+    "mock": "cd dist && node --inspect-brk=9229 mockDebug.js"
 }
 ```
 > `dist`为需要开启`mock-mini-server`的文件夹的根目录
 > `9229`为`vsCode`中的配置文件`launch.json`中自动生成的`port`
 
-2. dist目录下面添加run.js
+2. dist目录下面添加`mockDebug.js`
 ```js
 const mockServer = require('mock-mini-server');
 
