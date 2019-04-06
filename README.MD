@@ -8,12 +8,17 @@ npm install mock-mini-server
 
 ## 运行
 
-1. 切换到需要运行本地服务器的根目录
+- 切换到需要运行本地服务器的根目录
 ```
 cd dist
 ```
 
-2. 直接运行或者指定端口号，指定的端口号会覆盖[mockhttp.js](#mockhttp.js配置)中配置的端口号
+- 生成配置文件`mockhttp.js`
+```
+mpck-mini-server init
+```
+
+- 直接运行或者指定端口号，指定的端口号会覆盖[mockhttp.js](#mockhttp.js配置)中配置的端口号
 ```
 mock-mini-server 或者 mock-mini-server 8080
 ```
