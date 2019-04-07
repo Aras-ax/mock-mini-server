@@ -5,9 +5,13 @@ module.exports = {
          */
         defaultDataFile: '',
         /**
-         * 所有数据文件的根目录
+         * 所有数据文件的根目录，相对路径或者绝对路径
          */
         baseDist: '', //'localData',
+        /**
+         * 目标路径，开启server的根目录，默认值为空，表示process.cwd()，相对路径或者绝对路径
+         */
+        contentBase: '',
         /**
          * 本地服务器端口
          */

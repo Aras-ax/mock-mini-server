@@ -2,11 +2,13 @@ module.exports = {
     /** 
      * 全数据文件名称
      */
-	defaultDataFile: 'all_data.js',
+	// defaultDataFile: 'all_data.js',
+	defaultDataFile: 'basicData.js',
     /**
      * 所有数据文件的根目录
      */
-	baseDist: 'goform', //'localData',
+	baseDist: './goform',
+	contentBase: '/Users/xiechang/Documents/project/reasy-team/reasy-vue-cli/dist',
     /**
      * 本地服务器端口
      */

@@ -7,13 +7,13 @@ const util = require('./util/index');
 const mockExtend = require('./util/mockExtend');
 const Mock = require('mockjs');
 const chokidar = require('chokidar');
+const fs = require('fs');
 const templateKey = 'template';
 const console = global.console;
-const cwd = process.cwd();
 const { throttling } = require('./util/index');
 
 class MockServer {
-    constructor(app, option) {
+    constructor(app, option, cwd) {
         this.app = app;
         this.option = option;
         this.mockTemplate = {};
@@ -21,7 +21,16 @@ class MockServer {
         this.Mock = Mock;
         this.errorTimes = 0;
         this.apiObj = {};
-        this.cwdBase = path.join(cwd, this.option.baseDist);
+        this.cwdBase = cwd;
+
+        // 解析baseDist地址
+        if (this.option.baseDist) {
+            if (path.isAbsolute(this.option.baseDist) && fs.existsSync(this.option.baseDist)) {
+                this.cwdBase = this.option.baseDist;
+            } else {
+                this.cwdBase = path.join(cwd, this.option.baseDist);
+            }
+        }
 
         if (option.mockExtend || Object.prototype.toString.call(option.mockExtend) !== '[object Object]') {
             option.mockExtend = {};
@@ -135,7 +144,7 @@ class MockServer {
                 }).then(() => {
                     this.handleTemplate();
                 }).catch(() => {
-                    console.error(`获取全部数据模版出错, 请检查对应的数据文件格式是否正确。`);
+                    console.error(`获取全部数据模版出错, 请检查对应的数据文件是否存在或者格式是否正确。`);
                 });
             } else {
                 // json数据模版解析
@@ -257,7 +266,8 @@ class MockServer {
     mock(requestUrl) {
         let obj = this.mockTemplate[requestUrl],
             data,
-            template = obj[templateKey];
+            template = obj[templateKey] || obj;
+
         if (typeof template === 'function') {
             data = template();
         } else {
