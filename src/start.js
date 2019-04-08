@@ -1,14 +1,18 @@
 const figlet = require('figlet');
 const fs = require('fs');
 const path = require('path');
-const util = require('./util/index');
+const server = require('./server');
 
-let config = { version: "1.0.0" };
-util.loadFile(path.join(__dirname, '../package.json')).then(res => {
-    config = JSON.parse(res);
-});
+let config = {
+    version: require('../package.json')['version']
+};
+
 
 const comments = [{
+    key: 'contentBase',
+    text: '开启本地服务器的上下文',
+    value: ''
+}, {
     key: 'defaultDataFile',
     text: '全数据文件名称',
     value: '""'
@@ -61,7 +65,7 @@ function handleInit() {
 function handleVersion() {
     console.log('v' + config.version);
 
-    figlet('MOCK-MINI-SERVER', function (err, data) {
+    figlet('MOCK-MINI-SERVER', function(err, data) {
         if (err) {
             return;
         }
@@ -92,7 +96,6 @@ function start() {
 }
 
 function runServer() {
-    const server = require('./server');
     server.run();
 }
 module.exports = start;

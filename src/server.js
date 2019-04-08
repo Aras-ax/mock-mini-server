@@ -44,9 +44,11 @@ function startServer(serverConfig) {
         }
     }
 
-    // 端口号
+    // 端口号，添加判断机制
     if (process.argv.length > 2) {
-        port = process.argv[2];
+        let _port = +process.argv[2];
+
+        port = isNaN(_port) ? options.port : _port;
     } else {
         port = options.port;
     }
@@ -73,7 +75,7 @@ function initMidware() {
     /**
      * 处理所有的请求，中间件
      */
-    app.all('*', function (req, res, next) {
+    app.all('*', function(req, res, next) {
         let reqData = req.body;
         global.console.log(`请求内容：${JSON.stringify(reqData, 2)}`);
         global.console.log("-----------------------------------------------");
