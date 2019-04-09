@@ -76,6 +76,13 @@ function initMidware() {
      * 处理所有的请求，中间件
      */
     app.all('*', function(req, res, next) {
+        // 运行跨域
+        res.header("Access-Control-Allow-Origin", "*");
+        res.header("Access-Control-Allow-Headers", "X-Requested-With");
+        res.header("Access-Control-Allow-Methods", "PUT,POST,GET,DELETE,OPTIONS");
+        res.header("X-Powered-By", ' 3.2.1')
+        res.header("Content-Type", "application/json;charset=utf-8");
+
         let reqData = req.body;
         global.console.log(`请求内容：${JSON.stringify(reqData, 2)}`);
         global.console.log("-----------------------------------------------");
@@ -135,9 +142,7 @@ function run(config) {
 
     let openBrowser = options.openBrowser;
     let server = app.listen(port, () => {
-        let host = server.address().address;
-        let port = server.address().port;
-        global.console.log(`Server Listenig At http://${host}:${port}`);
+        global.console.log(`Server Listenig At http://localhost:${port}`);
         openBrowser && opn(`http://127.0.0.1:${port}`);
     });
 
