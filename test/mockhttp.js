@@ -18,7 +18,7 @@ module.exports = {
     /**
      * 是否是开发模式
      */
-    dev: false,
+    dev: true,
     middleWare: {
         api: '/module',
         callback: function(req, res, next, server) {

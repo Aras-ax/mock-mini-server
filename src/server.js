@@ -10,7 +10,7 @@ const app = Express();
 let curData = {};
 let cwd = process.cwd();
 let { loadFile } = require('./util/index');
-let options, port, mockServer;
+let options, port, mockServer, showLog;
 
 
 function startServer(serverConfig) {
@@ -34,6 +34,8 @@ function startServer(serverConfig) {
     } catch (e) {
         options = Object.assign({}, config.baseConfig);
     }
+
+    showLog = options.dev;
 
     // 解析target地址
     if (options.contentBase) {
@@ -76,16 +78,15 @@ function initMidware() {
      * 处理所有的请求，中间件
      */
     app.all('*', function(req, res, next) {
-        // 运行跨域
+        // 允许跨域
         res.header("Access-Control-Allow-Origin", "*");
         res.header("Access-Control-Allow-Headers", "X-Requested-With");
         res.header("Access-Control-Allow-Methods", "PUT,POST,GET,DELETE,OPTIONS");
-        res.header("X-Powered-By", ' 3.2.1')
-        res.header("Content-Type", "application/json;charset=utf-8");
 
-        let reqData = req.body;
-        global.console.log(`请求内容：${JSON.stringify(reqData, 2)}`);
-        global.console.log("-----------------------------------------------");
+        if (showLog) {
+            let reqData = req.body;
+            global.console.log(`请求：${req.path}, 内容：${JSON.stringify(reqData, 2)}`);
+        }
         next();
     });
 

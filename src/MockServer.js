@@ -70,7 +70,7 @@ class MockServer {
         this.initMidddleWare();
 
         //拦截请求
-        this.app.all('*', function (req, res, next) {
+        this.app.all('*', function(req, res, next) {
             let apiKey = req.path.replace(/^\//, '');
 
             // 根据请求获取对应的文件数据
@@ -104,7 +104,7 @@ class MockServer {
                 this.app.use(zhuru(mdWare, this));
                 break;
             case '[object Object]':
-                mdWare.callback = mdWare.callback || function (req, res, next) {
+                mdWare.callback = mdWare.callback || function(req, res, next) {
                     next();
                 };
                 if (mdWare.api) {
@@ -116,7 +116,7 @@ class MockServer {
                 break;
             case '[object Array]':
                 for (let i = 0, item; item = mdWare[i++];) {
-                    item.callback = item.callback || function (req, res, next) {
+                    item.callback = item.callback || function(req, res, next) {
                         next();
                     };
 
@@ -195,6 +195,7 @@ class MockServer {
             });
         }).catch((e) => {
             this.error(`请求[${requestUrl}]加载数据错误或者对应的内容不存在！加载默认配置！`);
+            global.console.log("-----------------------------------------------");
             return Promise.reject();
         });
     }
@@ -310,7 +311,8 @@ class MockServer {
 
     log(text) {
         if (this.option.dev) {
-            console.log(text);
+            global.console.log(text);
+            global.console.log("-----------------------------------------------");
         }
     }
     error(text) {
@@ -319,7 +321,7 @@ class MockServer {
 }
 
 function zhuru(mdware, server) {
-    return function (req, res, next) {
+    return function(req, res, next) {
         mdware.call(this, req, res, next, server);
     };
 }
