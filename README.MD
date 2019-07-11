@@ -109,7 +109,7 @@ defaultDataFile: 'index.json'
 1. `package.json`添加如下配置
 ```json
 "scripts": {
-    "mock": "cd dist && node --inspect-brk=9229 mockDebug.js"
+    "mock": "node --inspect-brk=9229 ./mockDebug.js"
 }
 ```
 > `dist`为需要开启`mock-mini-server`的文件夹的根目录

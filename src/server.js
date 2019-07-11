@@ -32,6 +32,7 @@ function startServer(serverConfig) {
         }
         options = Object.assign({}, config.baseConfig, serverConfig);
     } catch (e) {
+        console.log(e.message);
         options = Object.assign({}, config.baseConfig);
     }
 
