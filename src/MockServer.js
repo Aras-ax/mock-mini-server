@@ -194,6 +194,7 @@ class MockServer {
                 }, obj.delay);
             });
         }).catch((e) => {
+            console.log(e);
             this.error(`请求[${requestUrl}]加载数据错误或者对应的内容不存在！加载默认配置！`);
             global.console.log("-----------------------------------------------");
             return Promise.reject();
@@ -217,7 +218,11 @@ class MockServer {
         //
         if (mockItem) {
             return new Promise((resolve, reject) => {
-                resolve(this.mock(requestUrl, obj));
+                try {
+                    resolve(this.mock(requestUrl, obj));
+                } catch (e) {
+                    reject(e);
+                }
             });
         } else {
             // 加载对应的数据文件
