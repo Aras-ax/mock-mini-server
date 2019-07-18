@@ -141,6 +141,7 @@ class MockServer {
             if (path.extname(fullTemplate) === '.js') {
                 new Promise((resolve, reject) => {
                     this.mockTemplate = require(fullTemplate);
+                    resolve();
                 }).then(() => {
                     this.handleTemplate();
                 }).catch(() => {
