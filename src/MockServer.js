@@ -140,6 +140,7 @@ class MockServer {
             // js数据模版解析
             if (path.extname(fullTemplate) === '.js') {
                 new Promise((resolve, reject) => {
+                    delete require.cache[fullTemplate];
                     this.mockTemplate = require(fullTemplate);
                     resolve();
                 }).then(() => {
@@ -265,8 +266,12 @@ class MockServer {
             return _this.mock(requestUrl);
         }).catch((e) => {
             // 加载js文件
+            delete require.cache[`${url}.js`];
             _this.formatOption(requestUrl, require(`${url}.js`));
             return _this.mock(requestUrl);
+        }).catch(e => {
+            this.error(`请求[${requestUrl}]加载数据错误或者对应的内容不存在！加载默认配置！`);
+            return {};
         });
     }
 

@@ -1,6 +1,6 @@
 {
     "name": "mock-mini-server",
-    "version": "1.1.0",
+    "version": "1.1.1",
     "description": "Mock + Express  简易配置本地假数据服务器",
     "main": "src/server.js",
     "bin": {

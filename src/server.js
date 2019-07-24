@@ -23,13 +23,13 @@ function startServer(serverConfig) {
                 } else {
                     serverConfig = path.join(cwd, serverConfig);
                 }
-                delete require.cache[require(serverConfig)];
+                delete require.cache[serverConfig];
                 serverConfig = require(serverConfig);
             } else if (Object.prototype.toString.call(serverConfig) !== '[object Object]') {
                 serverConfig = {};
             }
         } else {
-            delete require.cache[require(path.join(cwd, config.configFile))];
+            delete require.cache[path.join(cwd, config.configFile)];
             serverConfig = require(path.join(cwd, config.configFile));
         }
         options = Object.assign({}, config.baseConfig, serverConfig);
