@@ -1,5 +1,5 @@
 # mock-mini-server
-Mock + Express 本地假数据服务器，数据文件格式直接采用[Mock](http://mockjs.com/)的语法，同时间，支持扩展`Mock数据占位符`
+Mock + Express 本地假数据服务器，数据文件格式直接采用[Mock](http://mockjs.com/)的语法，支持扩展`Mock数据占位符`
 
 ## 安装
 ```
